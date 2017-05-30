@@ -236,6 +236,7 @@ class SurfaceCache:
             page_nb (integer):  number of the page to be prerendered
         """
         for name in self.active_widgets:
+            logger.debug('Queuing render of page {} for widget {}'.format(page_nb, name))
             GLib.idle_add(self.renderer, name, page_nb)
 
     def renderer(self, widget_name, page_nb):
@@ -260,6 +261,8 @@ class SurfaceCache:
                 return False
             ww, wh = self.surface_size[widget_name]
             wtype = self.surface_type[widget_name]
+
+        logger.debug('Going to render page {} for widget {} with type {} and size {}x{}'.format(page_nb, widget_name, wtype, ww, wh))
 
         if ww < 0 or wh < 0:
             logger.warning('Widget {} with invalid size {}x{} when rendering'.format(widget_name, ww, wh))
