@@ -816,6 +816,9 @@ class UI:
 
             # Cache miss: render the page, and save it to the cache
             ww, wh = widget.get_allocated_width(), widget.get_allocated_height()
+
+            logger.warning('Going to render page {} while drawing, for widget {} with type {} and size {}x{}'.format(nb, name, wtype, ww, wh))
+
             pb = widget.get_window().create_similar_surface(cairo.CONTENT_COLOR, ww, wh)
 
             cairo_prerender = cairo.Context(pb)
