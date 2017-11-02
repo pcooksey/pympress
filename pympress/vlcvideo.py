@@ -151,10 +151,11 @@ class VLCVideo(Gtk.VBox):
         if not parent:
             return
         pw, ph = parent.get_allocated_width(), parent.get_allocated_height()
-        self.props.margin_left   = pw * self.relative_margins.x1
-        self.props.margin_right  = pw * self.relative_margins.x2
-        self.props.margin_bottom = ph * self.relative_margins.y1
-        self.props.margin_top    = ph * self.relative_margins.y2
+        # Full screen video
+        self.props.margin_left   = self.relative_margins.x1
+        self.props.margin_right  = self.relative_margins.x2
+        self.props.margin_bottom = self.relative_margins.y1
+        self.props.margin_top    = self.relative_margins.y2
 
 
     def set_file(self, filepath):
@@ -179,6 +180,20 @@ class VLCVideo(Gtk.VBox):
             self.resize()
             self.overlay.show_all()
         GLib.idle_add(self.player.play)
+
+    def pause(self):
+        ''' Pause the media file.
+        Bring the widget to the top of the overlays if necessary (copied from play(self).
+        '''
+        self.movie_zone.show()
+        if not self.get_parent():
+            self.overlay.add_overlay(self)
+            self.overlay.reorder_overlay(self, 2)
+            self.set_halign(Gtk.Align.FILL)
+            self.set_valign(Gtk.Align.FILL)
+            self.resize()
+            self.overlay.show_all()
+        GLib.idle_add(self.player.pause)
 
 
     def on_click(self, widget, event):
